@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ------------------ data ------------------ */
   const PRODUCTS = [ 
-        { brand: "Maison Margiela", name: "메종 마르지엘라 레플리카 레이지 선데이 모닝 오 드 뚜왈렛", price: 98000, rating: 4.89, image: "./img/product-list/rank-s/perfume/lst1-maisonmargiela-replica-lazy-sundaymorning.jpg", category: "PERFUME" },
+  { brand: "Maison Margiela", name: "메종 마르지엘라 레플리카 레이지 선데이 모닝 오 드 뚜왈렛", price: 98000, rating: 4.89, image: "./img/product-list/rank-s/perfume/lst1-maisonmargiela-replica-lazy-sundaymorning.jpg", category: "PERFUME" },
   { brand: "Diptyque", name: "딥티크 오르페옹 오 드 퍼퓸", price: 269000, rating: 4.75, image: "./img/product-list/rank-s/perfume/lst2-diptyque-ambre-eau-de-parfum.jpg", category: "PERFUME" },
   { brand: "Lanvin", name: "랑방 에끌라 드 아르페쥬 오 드 퍼퓸", price: 64000, rating: 4.58, image: "./img/product-list/rank-s/perfume/lst3-lanvin-eclat-darpege-eau-de-parfum.jpg", category: "PERFUME" },
   { brand: "Jennifer Lopez", name: "제니퍼로페즈 글로우 바이제이로 EDT", price: 55000, rating: 4.56, image: "./img/product-list/rank-s/perfume/lst4-jenniferlopez-glow-by-jlo-edt.jpg", category: "PERFUME" },
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ◀ 이전 버튼
     const prevLi = document.createElement('li');
     const prevBtn = document.createElement('button');
-    prevBtn.textContent = '◀';
+    prevBtn.textContent = '‹';
     prevBtn.disabled = currentPage === 1;
     prevBtn.addEventListener('click', () => {
       if (currentPage > 1) {
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ▶ 다음 버튼
     const nextLi = document.createElement('li');
     const nextBtn = document.createElement('button');
-    nextBtn.textContent = '▶';
+    nextBtn.textContent = '›';
     nextBtn.disabled = currentPage === totalPages;
     nextBtn.addEventListener('click', () => {
       if (currentPage < totalPages) {

@@ -3,6 +3,7 @@
     text-align: center;
     margin-bottom: 6rem;
     margin-top: 6rem;
+    font-size: 2.45rem;
 }
 .p-wrap {
     display: grid;
@@ -16,10 +17,9 @@
 }
 .p-cate{
     display: flex;
-    flex-direction: column;
 }
 /* ===========================================
-   🔹 필터 전체 영역
+    필터 전체 영역
    =========================================== */
 .btn-filter-pc-hidden{
   display: none;
@@ -70,7 +70,7 @@
 }
 
 /* ===========================================
-   🔸 아코디언 (필터 항목별)
+   아코디언 (필터 항목별)
    =========================================== */
 .acc-item {
   border-bottom: 1px solid var(--slate-gray-300);
@@ -125,7 +125,7 @@
 }
 
 /* ===========================================
-   🏷️ 태그(칩) 리스트
+   태그(칩) 리스트
    =========================================== */
 .tag-list {
   display: flex;
@@ -166,10 +166,10 @@
     gap: 2rem;
     font-size: 0.7rem;
     color: var(--slate-gray-700);
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 /* ===========================================
-   🛍️ 상품 리스트 (그리드)
+  상품 리스트 (그리드)
    =========================================== */
 .product-grid {
   display: grid;
@@ -246,11 +246,11 @@
 }
 
 /* ===========================================
-   📂 카테고리 (좌측 필터)
+   카테고리 (좌측 필터)
    =========================================== */
-.p-cate dl{
+.p-cate dl {
     width: 100%;
-    margin-bottom: 6rem;
+    margin-bottom: 3rem;
 }
 .p-cate dt{
     /* box-sizing: border-box; */
@@ -299,21 +299,22 @@
     margin-left: 0;
   transition: none;
 }
-  .btn-filter-pc-hidden {
+.btn-filter-pc-hidden {
     display: inline-flex;
     background: var(--slate-gray-100);
     color: var(--slate-gray-500);
     padding: 0.3rem 0.5rem;
     font-size: .8rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
-  .filter-wrap {
+.filter-wrap {
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
-    max-height: 80vh;
+    /* margin-bottom: 10rem; */
+    height: 45vh;
     overflow-y: auto;
     background: #fff;
     border-radius: 20px 20px 0 0;
@@ -322,10 +323,10 @@
     transition: transform .3s ease;
     z-index: 1001;
     padding: 1.5rem;
-  }
+}
 
   .filter-wrap.is-open {
-    transform: translateY(0); /* 👈 열릴 때 슥 올라옴 */
+    transform: translateY(0); /* 열릴 때 슥 올라옴 */
   }
 
   /* 필터 백드롭 (검은 반투명 배경) */
