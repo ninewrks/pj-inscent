@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { brand: "Byredo",    name: "바이레도 알토 아스트랄 오 드 퍼퓸", price: 355000, image: "./img/product-list/new/inscent-byredo-astral-oud_M.jpg", category: "PERFUME" },
     { brand: "Yves Saint",name: "입생로랑 베이비캣 오 드 빠르펭", price: 360000, image: "./img/product-list/new/inscent-yves-saint-laurent-babycat_M-04.jpg", category: "PERFUME" },
     { brand: "Diptyque",  name: "딥티크 플레르 드 뽀 오 드 뚜왈렛", price: 196000, image: "./img/product-list/new/inscent-diptyque-fleur-de-peau_M.jpg", category: "PERFUME" },
-    { brand: "Le Labo",   name: "르라보 오스만투스 19", price: 730000, image: "./img/product-list/new/inscent-le-labo-osmanthus19_M-06.jpg", category: "PERFUME" },
+    { brand: "Le Labo",   name: "르라보 오스만투스 19", price: 73000, image: "./img/product-list/new/inscent-le-labo-osmanthus19_M-06.jpg", category: "PERFUME" },
     { brand: "Byredo", name: "바이레도 유자 트리 핸드 로션", price: 91000, image: "./img/product-list/new/01body-byredo-yuzu-tree-hand-lotion.jpg", category: "BODY" },
     { brand: "Acqua Di Parma", name: "아쿠아 디 파르마 핸드 앤 바디 로션 부옹조르노", price: 129000, image: "./img/product-list/new/02body-acquadiparma-buongiorno-hand-body-lotion.jpg", category: "BODY" },
     { brand: "Jo Malone", name: "조말론 라임 바질 앤 만다린 바디 앤 핸드 로션", price: 59000, image: "./img/product-list/new/03body-jomalone-lime-basil-mandarin-body-hand-lotion.jpg", category: "BODY" },
@@ -93,7 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
     { brand: "Diptyque", name: "딥디크 플레르 드 포 핸드 앤 바디 로션", price: 91000, image: "./img/product-list/new/05body-diptyque-fleur-de-peau-hand-body-lotion.jpg", category: "BODY" },
     { brand: "Tamburins", name: "탬버린즈 샤워리 바디 로션 포그", price: 39000, image: "./img/product-list/new/06body-tamburins-showery-fog.jpg", category: "BODY" },
     { brand: "Tamburins", name: "탬버린즈 샤워리 바디 로션 님버스", price: 39000, image: "./img/product-list/new/07body-tamburins-showery-nimbus.jpg", category: "BODY" },
-];
+
+    
+  ];
 
 /* ------------------ pagination ------------------ */
   function renderPager(totalItems) {

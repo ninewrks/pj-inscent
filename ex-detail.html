@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>상세페이지 · InScent</title>
+  <script src="./js/product-deta.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Pretendard 등 프로젝트 폰트/토큰은 네가 쓰는 공통 CSS에 연결해도 됨 -->
+  <style>
+    :root{
+      --ink:#111; --muted:#6b7280; --line:#e5e7eb; --bg:#fff;
+      --chip-bg:#fafafa; --radius:.6rem;
+    }
+    body{font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif; margin:0; color:var(--ink); background:var(--bg)}
+    .wrap{max-width:1200px; margin:0 auto; padding:24px}
+    .breadcrumb{font-size:.9rem; color:var(--muted); margin-bottom:16px}
+    .product{display:grid; grid-template-columns:1.1fr 1fr; gap:32px; align-items:start}
+    .media{position:relative}
+    .media img{width:100%; height:auto; border-radius:12px; object-fit:cover; background:#f5f5f5}
+    .info h1{font-size:1.5rem; line-height:1.3; margin:.25rem 0 .35rem}
+    .brand{color:var(--muted); margin-bottom:.25rem}
+    .price{font-size:1.25rem; margin:.5rem 0 1rem}
+    .meta{display:flex; gap:8px; flex-wrap:wrap; margin:0 0 16px; padding:0; list-style:none}
+    .chip{border:1px solid var(--line); background:var(--chip-bg); padding:.4rem .7rem; border-radius:999px; font-size:.85rem}
+    .ctrl{display:grid; gap:10px; margin:16px 0 20px}
+    select, button{font:inherit}
+    select{padding:.6rem .75rem; border:1px solid var(--line); border-radius:var(--radius); background:#fff}
+    .cta{display:flex; gap:10px}
+    .btn{padding:.85rem 1rem; border-radius:var(--radius); cursor:pointer}
+    .btn.primary{background:#111; color:#fff; border:1px solid #111}
+    .btn.outline{background:#fff; color:#111; border:1px solid #111}
+    .notice{font-size:.875rem; color:var(--muted)}
+    @media (max-width: 768px){ .product{grid-template-columns:1fr} .wrap{padding:16px} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="breadcrumb">
+      <a href="./index.html">홈</a> › <a href="./list.html" id="crumb-cat">목록</a> › <span id="crumb-name">상세</span>
+    </nav>
+
+    <article class="product" id="product" data-scent="" data-mood="" data-lasting="">
+      <figure class="media">
+        <img id="pd-image" src="" alt="" onerror="this.src='https://via.placeholder.com/800x800?text=No+Image'">
+      </figure>
+
+      <section class="info">
+        <p class="brand" id="pd-brand"></p>
+        <h1 id="pd-name"></h1>
+        <div class="price"><strong id="pd-price"></strong></div>
+
+        <!-- 태그칩 -->
+        <ul class="meta">
+          <li class="chip" id="tag-scent"  title="향계열"></li>
+          <li class="chip" id="tag-mood"   title="분위기"></li>
+          <li class="chip" id="tag-last"   title="지속력"></li>
+        </ul>
+
+        <!-- 옵션/컨트롤 -->
+        <div class="ctrl">
+          <label>
+            <span class="sr-only">용량 선택</span>
+            <select id="pd-capacity" aria-label="용량 선택"></select>
+          </label>
+          <div class="cta">
+            <button class="btn outline" type="button" id="btn-like">♥ 찜</button>
+            <button class="btn primary" type="button" id="btn-cart">장바구니</button>
+          </div>
+        </div>
+
+        <p class="notice" id="pd-note">* 가격은 용량과 판매처에 따라 달라질 수 있어요.</p>
+      </section>
+    </article>
+  </div>
+
+  <!-- 1) detailList 데이터 파일을 반드시 이 스크립트보다 먼저 로드하세요 -->
+  <!-- <script src="./data/detailList.js" defer></script> -->
+
+  <script>
+  // ====== 유틸 ======
+  const $ = (sel, scope=document)=>scope.querySelector(sel);
+  function q(param){const u=new URLSearchParams(location.search);return u.get(param);}
+  function formatKRW(num){try{return Number(num).toLocaleString('ko-KR',{style:'currency',currency:'KRW'})}catch{return num}}
+
+  // ====== 소스 데이터 ======
+  // detailList는 외부에서 로드된다고 가정. 없으면 아래 한 줄로 가드.
+  window.detailList = window.detailList || [];
+
+  // URL로 대상 찾기: ?id=인덱스 또는 ?name=상품명
+  function findProduct() {
+    const byId = q('id');
+    if (byId !== null) {
+      const idx = parseInt(byId, 10);
+      if (!Number.isNaN(idx) && detailList[idx]) return detailList[idx];
+    }
+    const byName = q('name');
+    if (byName) {
+      const decoded = decodeURIComponent(byName).trim();
+      const hit = detailList.find(p => p.name.trim() === decoded);
+      if (hit) return hit;
+    }
+    // 둘 다 없으면 0번(첫 상품) 기본
+    return detailList[0];
+  }
+
+  // ====== 렌더링 ======
+  function renderDetail(product){
+    if(!product){ document.body.innerHTML = '<div class="wrap"><p>상품을 찾을 수 없어요.</p></div>'; return; }
+
+    // 기본 정보
+    $('#pd-image').src = product.image;
+    $('#pd-image').alt = `${product.brand} ${product.name}`;
+    $('#pd-brand').textContent = product.brand;
+    $('#pd-name').textContent  = product.name;
+    $('#pd-price').textContent = formatKRW(product.price);
+
+    // data-* (필터 연동 대비)
+    const root = $('#product');
+    root.dataset.scent   = product.tags?.scent   || '';
+    root.dataset.mood    = product.tags?.mood    || '';
+    root.dataset.lasting = product.tags?.lasting || '';
+
+    // 태그칩
+    $('#tag-scent').textContent = product.tags?.scent   || '';
+    $('#tag-mood').textContent  = product.tags?.mood    || '';
+    $('#tag-last').textContent  = product.tags?.lasting || '';
+
+    // 빵크럼
+    $('#crumb-cat').textContent = product.category || '목록';
+    $('#crumb-name').textContent= product.name;
+
+    // 용량 옵션
+    const capSel = $('#pd-capacity');
+    capSel.innerHTML = '';
+    const caps = Array.isArray(product.capacity) && product.capacity.length ? product.capacity : ['기본'];
+    caps.forEach(c => {
+      const opt=document.createElement('option'); opt.value=c; opt.textContent=c; capSel.appendChild(opt);
+    });
+
+    // 이벤트(샘플)
+    $('#btn-like').addEventListener('click', e=>{
+      e.currentTarget.classList.toggle('is-like');
+      e.currentTarget.textContent = e.currentTarget.classList.contains('is-like') ? '♥ 찜됨' : '♥ 찜';
+    });
+
+    $('#btn-cart').addEventListener('click', ()=>{
+      const chosen = capSel.value;
+      // 여기에 장바구니 로직 연결
+      alert(`${product.name} (${chosen}) 장바구니에 담았습니다.`);
+    });
+  }
+
+  // ====== 실행 ======
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const product = findProduct();
+    renderDetail(product);
+  });
+
+  // KRW 포맷
+const fmtKRW = n => typeof n === 'number'
+  ? n.toLocaleString('ko-KR', { style:'currency', currency:'KRW' })
+  : '';
+
+// 해당 용량에 맞는 KR 가격 반환(variants 우선)
+function getKRPrice(product, size) {
+  const v = Array.isArray(product.variants) ? product.variants.find(x => x.size === size) : null;
+  if (v) return v.priceKR;       // 숫자 또는 null
+  // variants가 없으면 대표가(리스트가)로 폴백
+  return product.price ?? null;  // 대표가 존재 시
+}
+
+// 상세 렌더 (가격/용량 포함)
+function renderDetail(product){
+  if(!product){ document.body.innerHTML = '<div class="wrap"><p>상품을 찾을 수 없어요.</p></div>'; return; }
+
+  // ===== 기본 =====
+  document.getElementById('pd-image').src = product.image;
+  document.getElementById('pd-image').alt = `${product.brand} ${product.name}`;
+  document.getElementById('pd-brand').textContent = product.brand;
+  document.getElementById('pd-name').textContent  = product.name;
+
+  // 태그칩 & 데이터
+  const root = document.getElementById('product');
+  root.dataset.scent   = product.tags?.scent   || '';
+  root.dataset.mood    = product.tags?.mood    || '';
+  root.dataset.lasting = product.tags?.lasting || '';
+  document.getElementById('tag-scent').textContent = product.tags?.scent   || '';
+  document.getElementById('tag-mood').textContent  = product.tags?.mood    || '';
+  document.getElementById('tag-last').textContent  = product.tags?.lasting || '';
+
+  // ===== 용량 옵션 구성 =====
+  const capSel = document.getElementById('pd-capacity');
+  capSel.innerHTML = '';
+  const caps = Array.isArray(product.variants) && product.variants.length
+    ? product.variants.map(v => v.size)
+    : (Array.isArray(product.capacity) && product.capacity.length ? product.capacity : ['기본']);
+
+  caps.forEach(size => {
+    const opt = document.createElement('option');
+    opt.value = size; opt.textContent = size;
+    capSel.appendChild(opt);
+  });
+
+}
+  </script>
+</body>
+</html>
