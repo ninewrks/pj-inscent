@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Product List Demo</title>
+<style>
+/* ---- 기본 스타일 ---- */
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR",sans-serif;margin:24px}
+
+/* 카테고리(좌측) */
+.p-cate dd{cursor:pointer;color:#6b7280;margin:.25rem 0}
+.p-cate dd.is-active{color:#111;font-weight:600;text-decoration:underline}
+
+/* 상품 리스트 */
+.product-list{margin-top:24px}
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
+  gap:32px; list-style:none; padding:0; margin:0;
+}
+.product-card{position:relative;text-align:center}
+.product-card .thumb{aspect-ratio:1/1;overflow:hidden;border:1px solid #eee;border-radius:8px}
+.product-card img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.product-card:hover img{transform:scale(1.05)}
+.meta .brand{margin-top:.6rem;font-size:.9rem;color:#555}
+.meta .name{margin:.2rem 0;font-size:.95rem;font-weight:500}
+.meta .price{font-size:.95rem;font-weight:700;color:#111}
+.btn-like{position:absolute;right:.5rem;bottom:.5rem;background:none;border:none;font-size:1.2rem;cursor:pointer;color:#999}
+.btn-like.is-active{color:#d33}
+
+/* 아코디언(필요시) */
+.acc-item{border-bottom:1px solid #e5e7eb}
+.acc-head{width:100%;text-align:left;background:none;border:0;padding:1rem 0;font-size:1.2rem;font-weight:700;cursor:pointer;position:relative}
+.acc-head::after,.acc-head::before{content:"";position:absolute;right:.25rem;top:50%;width:20px;height:2px;background:#6b7280;transform:translateY(-50%)}
+.acc-head::before{transform:translateY(-50%) rotate(90deg)}
+.acc-item.is-open .acc-head::before{transform:translateY(-50%) rotate(90deg) scaleX(0)}
+.acc-panel{overflow:hidden;max-height:0;transition:max-height .25s}
+.acc-item.is-open .acc-panel{max-height:480px}
+
+.tag-list{display:flex;flex-wrap:wrap;gap:.5rem;padding:.25rem 0 1rem}
+.tag{padding:.45rem 1rem;border-radius:999px;border:1px solid #d1d5db;background:#f3f4f6;color:#111;font-size:.9rem;cursor:pointer}
+.tag.is-active{background:#111;color:#fff;border-color:#111}
+</style>
+</head>
+<body>
+
+<!-- 좌측 카테고리 -->
+<section class="p-cate">
+  <dl class="point">
+    <dt>CATEGORY</dt>
+    <dd class="is-active">ALL</dd>
+    <dd>PERFUME</dd>
+    <dd>BODY</dd>
+    <dd>HAIR</dd>
+    <dd>ETC</dd>
+  </dl>
+</section>
+
+<!-- (선택) 필터 아코디언 예시 -->
+<div class="acc-item">
+  <button class="acc-head" type="button">향 계열</button>
+  <div class="acc-panel">
+    <div class="tag-list" data-name="scent">
+      <button class="tag">플로랄</button>
+      <button class="tag">프레시</button>
+      <button class="tag">우디</button>
+      <button class="tag">오리엔탈</button>
+      <button class="tag">기타</button>
+    </div>
+  </div>
+</div>
+
+<!-- 상품 리스트 -->
+<section class="product-list" aria-label="상품 리스트">
+  <ul class="product-grid"></ul>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const productGrid = document.querySelector('.product-grid');
+
+  /* 1) 데이터 */
+  const products = [
+    { brand:"Maison Margiela", name:"레이지 선데이 모닝 오 드 뚜왈렛", price:98000, category:"PERFUME", image:"https://via.placeholder.com/600x600?text=Perfume+1", link:"#"},
+    { brand:"Diptyque",        name:"오르페옹 오 드 퍼퓸",           price:269000, category:"PERFUME", image:"https://via.placeholder.com/600x600?text=Perfume+2", link:"#"},
+    { brand:"Le Labo",         name:"어나더 13 바디 로션",            price:92000,  category:"BODY",    image:"https://via.placeholder.com/600x600?text=Body+1", link:"#"},
+    { brand:"Diptyque",        name:"헤어 미스트",                    price:110000, category:"HAIR",    image:"https://via.placeholder.com/600x600?text=Hair+1", link:"#"},
+    { brand:"Tamburins",       name:"퍼퓸 핸드크림",                  price:55000,  category:"ETC",     image:"https://via.placeholder.com/600x600?text=Etc+1", link:"#"},
+  ];
+
+  /* 2) 렌더 함수 */
+  function renderProducts(items) {
+    productGrid.innerHTML = '';
+    items.forEach(p => {
+      const li = document.createElement('li');
+      li.className = 'product-card';
+      li.dataset.category = p.category;
+      li.innerHTML = `
+        <a class="product-link" href="${p.link}">
+          <figure class="thumb">
+            <img src="${p.image}" alt="${p.brand} ${p.name}" loading="lazy"
+                 onerror="this.src='https://via.placeholder.com/400x400?text=No+Image'">
+          </figure>
+          <figcaption class="meta">
+            <p class="brand">${p.brand}</p>
+            <h3 class="name">${p.name}</h3>
+            <p class="price">₩${p.price.toLocaleString()}</p>
+          </figcaption>
+        </a>
+        <button class="btn-like" type="button" aria-label="좋아요" aria-pressed="false">♡</button>
+      `;
+      productGrid.appendChild(li);
+    });
+
+    // 좋아요 토글
+    document.querySelectorAll('.btn-like').forEach(btn => {
+      btn.addEventListener('click', () => btn.classList.toggle('is-active'));
+    });
+  }
+
+  /* 3) 최초 렌더 */
+  renderProducts(products);
+
+  /* 4) 좌측 카테고리 필터 */
+  const cateWrap = document.querySelector('.p-cate');
+  if (cateWrap) {
+    cateWrap.addEventListener('click', (e) => {
+      const dd = e.target.closest('dd');
+      if (!dd) return;
+
+      // UI
+      cateWrap.querySelectorAll('dd').forEach(el => el.classList.remove('is-active'));
+      dd.classList.add('is-active');
+
+      const category = dd.textContent.trim().toUpperCase();
+      const list = (category === 'ALL')
+        ? products
+        : products.filter(p => p.category === category);
+
+      renderProducts(list);
+    });
+  }
+
+  /* 5) (선택) 아코디언 */
+  document.querySelectorAll('.acc-item').forEach(item => {
+    const head  = item.querySelector('.acc-head');
+    const panel = item.querySelector('.acc-panel');
+    head.addEventListener('click', () => {
+      const open = !item.classList.contains('is-open');
+      item.classList.toggle('is-open', open);
+      panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0px';
+    });
+  });
+});
+</script>
+</body>
+</html>

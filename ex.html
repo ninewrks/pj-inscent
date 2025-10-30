@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>2Depth Menu Example</title>
+<style>
+  :root{ --h:72px; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:Pretendard, system-ui, -apple-system, sans-serif; }
+
+  /* 헤더 기본 */
+  #header{
+    position:fixed; inset:0 0 auto 0; height:var(--h);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 40px; color:#fff; background:transparent;
+    transition:background .25s ease, color .25s ease, box-shadow .25s ease;
+    z-index:1000;
+    backdrop-filter:saturate(160%) blur(6px);
+    -webkit-backdrop-filter:saturate(160%) blur(6px);
+  }
+
+  /* 스크롤 or 호버 시 흰 배경 */
+  #header.active,
+  #header:has(.gnb:hover){
+    background:#fff; color:#000; box-shadow:0 2px 5px rgba(0,0,0,.08);
+  }
+
+  /* 로고 */
+  .logo img{ height:36px; vertical-align:middle; }
+  .logo .black{ display:none; }
+  #header.active .white, #header:has(.gnb:hover) .white{ display:none; }
+  #header.active .black, #header:has(.gnb:hover) .black{ display:inline; }
+
+  /* 1뎁스 메뉴 */
+  .gnb{ display:flex; gap:40px; list-style:none; margin:0; padding:0; }
+  .gnb>li>a{ display:inline-block; padding:12px 0; text-decoration:none; color:inherit; font-weight:600; }
+
+  /* 2뎁스 영역 */
+  #depth2{
+    position:fixed; left:0; right:0; top:var(--h);
+    background:#fff; border-top:1px solid rgba(0,0,0,.06);
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+    opacity:0; transform:translateY(-8px); pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    z-index:950;
+  }
+  /* gnb 호버시 열림 */
+  #header:has(.gnb:hover) + #depth2{
+    opacity:1; transform:translateY(0); pointer-events:auto;
+  }
+
+  /* 패널 공통 */
+  .inner{ max-width:1200px; margin:0 auto; padding:20px 40px 28px; }
+  .panel{ display:none; }
+  .panel ul{ margin:0; padding:0; list-style:none; }
+  .panel li{ margin:8px 0; }
+  .panel a{ text-decoration:none; color:#111; font-size:15px; }
+  .panel a:hover{ text-decoration:underline; }
+
+  /* 각 메뉴별 활성 */
+  #header:has(.gnb>li[data-k="about"]:hover) + #depth2 .panel[data-k="about"],
+  #header:has(.gnb>li[data-k="shop"]:hover) + #depth2 .panel[data-k="shop"],
+  #header:has(.gnb>li[data-k="community"]:hover) + #depth2 .panel[data-k="community"],
+  #header:has(.gnb>li[data-k="contact"]:hover) + #depth2 .panel[data-k="contact"]{
+    display:block;
+  }
+
+  /* 테스트용 배경 */
+  .hero{ height:80vh; background:linear-gradient(180deg,#88aaff,#ffffff); }
+  .content{ min-height:1200px; background:#f7f8fa; padding-top:var(--h); }
+</style>
+</head>
+<body>
+  <header id="header">
+    <h1 class="logo">
+      <img class="white" src="https://dummyimage.com/120x36/ffffff/000000&text=LOGO" alt="logo white">
+      <img class="black" src="https://dummyimage.com/120x36/000000/ffffff&text=LOGO" alt="logo black">
+    </h1>
+    <nav>
+      <ul class="gnb">
+        <li><a href="#">Home</a></li>
+        <li data-k="about"><a href="#">About</a></li>
+        <li data-k="shop"><a href="#">Shop</a></li>
+        <li data-k="community"><a href="#">Community</a></li>
+        <li data-k="contact"><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div id="depth2">
+    <div class="inner">
+      <div class="panel" data-k="about">
+        <ul>
+          <li><a href="#">2뎁스1</a></li>
+          <li><a href="#">2뎁스2</a></li>
+          <li><a href="#">2뎁스3</a></li>
+        </ul>
+      </div>
+      <div class="panel" data-k="shop">
+        <ul>
+          <li><a href="#">2뎁스1</a></li>
+          <li><a href="#">2뎁스2</a></li>
+          <li><a href="#">2뎁스3</a></li>
+        </ul>
+      </div>
+      <div class="panel" data-k="community">
+        <ul>
+          <li><a href="#">2뎁스1</a></li>
+          <li><a href="#">2뎁스2</a></li>
+          <li><a href="#">2뎁스3</a></li>
+        </ul>
+      </div>
+      <div class="panel" data-k="contact">
+        <ul>
+          <li><a href="#">2뎁스1</a></li>
+          <li><a href="#">2뎁스2</a></li>
+          <li><a href="#">2뎁스3</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero"></section>
+    <section class="content"></section>
+  </main>
+
+<script>
+  /* JS 4줄: 스크롤 시 active 토글 */
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('active', window.scrollY > 50);
+  window.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+html{
+    font-size: var(--basic-font-pc);
+}
+/* *{box-sizing: border-box;} */
+footer{
+    display: flex;
+    font-size: 1rem;
+    background-color: var(--slate-gray-400);
+    color: #fff;
+    width: 100%;
+    min-height: 522px;
+}
+.footer-frame{
+    width: 100%;
+    padding-bottom: 20px;
+    margin: 0 auto;
+}
+.footer-wrap {
+    margin: 5rem 3.75rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+.logo{
+    width: 126px;
+}
+.footer-right{
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+.footer-sns>a{
+    width: 40px;
+}
+.footer-right p>a{
+    font-size: 1.55rem;
+}
+.footer-right p:nth-child(2){
+    font-size: 0.8rem;
+}
+.btn-inquiry{
+text-align: center;
+background-color: var(--slate-gray-400); 
+border: 1px solid #fff;
+color: #fff;              
+width: 233px;
+padding: 12px 28px;        
+font-size: 0.8rem;           
+cursor: pointer;           
+}
+.footer-menu{
+    font-size: 0.8rem;
+    display: flex;
+    gap: 1.5rem;
+}
+.footer-info{
+    margin-top: 85px;
+    margin-bottom: 85px;
+}
+.footer-menu ul {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    max-width: 455px;
+}
+.footer-right{
+    width: 446px;
+}
+.footer-sns{
+    display: flex;
+    gap: 15px;
+}
+#footer-notice{
+    margin-top: 30px;
+    text-align: center;
+}
+/* 태블릿 */
+@media (max-width:1024px){
+    html { font-size: var(--basic-font-tab); }
+    .footer-wrap {
+    margin: 5.5rem 1.6rem 30px;
+    }
+    .footer-wrap {
+    gap: 185px;
+}
+    .logo{
+        width: 94px;
+    }
+    .btn-inquiry {
+    width: 200px;
+    padding: 8px 0;
+    }
+}
+
+/* 모바일 */
+@media (max-width:768px){
+    html { font-size: var(--basic-font-mobile); }
+    .footer-wrap {
+    display: flex;
+    flex-direction: column;
+    margin: 37px 14px 17px;
+    gap: 34px;
+    }
+    
+    .footer-info {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+    .logo{
+        width: 63px;
+    }
+    .btn-inquiry{          
+    width: 124px;
+    padding: 7px 0;               
+    }
+    .footer-sns>a{
+    width: 30px;
+    }
+    
+}
